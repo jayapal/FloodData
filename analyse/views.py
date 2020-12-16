@@ -26,6 +26,7 @@ class FloodDetectView(views.APIView):
             geo_usa_obj = GeoUSA.objects.filter(poly__intersects=geom)
         else:
             geo_usa_obj = GeoUSA.objects.filter(poly__contains=geom)
+        print("Geo USA objs", geo_usa_obj)
         if geo_usa_obj:
             return response.Response({"message": "Address is under flood detected Area"})            
         return response.Response({"message": "Address is not under flood detected Area"})
