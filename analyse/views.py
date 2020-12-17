@@ -31,6 +31,6 @@ class FloodDetectView(views.APIView):
             zones_list =list(geo_usa_obj.distinct('name').values_list('name', flat=True))
             print(zones_list)
             zones = ','.join(zones_list)
-            return response.Response({"message": "Address is under flood Zone {}".format(zones)})
-        return response.Response({"message": "Address is not under any flood Zone"})
+            return response.Response({"zones": zones})
+        return response.Response({"zones": []})
 
