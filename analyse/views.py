@@ -28,6 +28,9 @@ class FloodDetectView(views.APIView):
             geo_usa_obj = GeoUSA.objects.filter(poly__contains=geom)
         print("Geo USA objs", geo_usa_obj)
         if geo_usa_obj:
-            return response.Response({"message": "Address is under flood Zone"})            
-        return response.Response({"message": "Address is not under flood Zone"})
+            zones_list =list(geo_usa_obj.distinct('name').values_list('name', flat=True))
+            print(zones_list)
+            zones = ','.join(zones_list)
+            return response.Response({"message": "Address is under flood Zone {}".format(zones)})
+        return response.Response({"message": "Address is not under any flood Zone"})
 
