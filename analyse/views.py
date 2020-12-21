@@ -25,7 +25,7 @@ class FloodDetectView(views.APIView):
         elif lookup_type == "intersects":
             geo_usa_obj = GeoUSA.objects.filter(poly__intersects=geom)
         else:
-            geo_usa_obj = GeoUSA.objects.filter(poly__contains=geom)
+            geo_usa_obj = GeoUSA.objects.filter(poly__intersects=geom)
         print("Geo USA objs", geo_usa_obj)
         if geo_usa_obj:
             zones_list =list(geo_usa_obj.distinct('name').values_list('name', flat=True))

@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.gis.db import models
 
 class GeoUSA(models.Model):
-    name = models.CharField(max_length=25) # corresponds to the 'str' field
+    name = models.CharField(max_length=2500) # corresponds to the 'str' field
     poly = models.PolygonField(srid=4269) # we want our model in a different SRID
 
     def __str__(self):
