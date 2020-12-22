@@ -8,5 +8,6 @@ mapping = {'name' :'FLD_ZONE', # The 'name' model field maps to the 'str' layer 
 
 
 def flood_zone_mapping(path, county):
-    lm = CustomLayerMapping(GeoUSA, path, mapping, custom={"county": county}
+    lm = CustomLayerMapping(GeoUSA, path, mapping, custom={"county": county})
     lm.save()
+
