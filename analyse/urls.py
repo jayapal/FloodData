@@ -4,5 +4,5 @@ from rest_framework import routers
 from . import views as analyse_views
 
 urlpatterns = [
-    path('flood-zones/', analyse_views.FloodDetectView.as_view()),
+    path('flood-zones/', analyse_views.FloodZoneView.as_view()),
 ]
