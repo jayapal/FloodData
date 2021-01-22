@@ -39,4 +39,4 @@ class GeoUSA(models.Model):
     poly = models.PolygonField(srid=4269) # we want our model in a different SRID
 
     def __str__(self):
-        return 'Name: %s' % self.name
+        return "{} - {} - {}".format(self.id, self.county, self.name)
