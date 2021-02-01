@@ -3,7 +3,7 @@ from django.contrib.gis.geos import GEOSGeometry
 from rest_framework import response, status, views
 
 from analyse.models import GeoUSA, COUNTY_LIST
-from oppurtunity.models import GeoOppurtunityZone
+from oppurtunity.models import GeoOpportunityZone
 from usda.models import GeoUSDA
 
 
@@ -68,7 +68,7 @@ class MappingDataView(views.APIView):
         filter_by = self.request.query_params.get('filter_by')
         geo_usa_objs_all = GeoUSA.objects.exclude(name='AREA NOT INCLUDED')
         geo_usda_objs_all = GeoUSDA.objects.filter(state='New Jersey')
-        geo_oppurtunity_objs_all = GeoOppurtunityZone.objects.filter(state='New Jersey')
+        geo_oppurtunity_objs_all = GeoOpportunityZone.objects.filter(state='New Jersey')
         for each in data:
             longitude = each.get('longitude', None)
             latitude = each.get('latitude', None)
@@ -91,7 +91,7 @@ class MappingDataView(views.APIView):
                 if geo_usa_objs:
                     zones_list =list(geo_usa_objs.distinct('name').values_list('name', flat=True))
             each.update({"is_usda_eligible": False}) if geo_usda_objs else each.update({"is_usda_eligible": True})
-            each.update({"is_oppurtunity_zone": True}) if geo_oppurtunity_objs else each.update({"is_oppurtunity_zone": False})
+            each.update({"is_opportunity_zone": True}) if geo_oppurtunity_objs else each.update({"is_opportunity_zone": False})
             each.update({"zones": zones_list})
             response_list.append(each)
         return response.Response(response_list)

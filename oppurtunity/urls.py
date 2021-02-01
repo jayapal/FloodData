@@ -4,6 +4,6 @@ from rest_framework import routers
 from . import views as oppurtunity_views
 
 urlpatterns = [
-    path('oppurtunity-zone/', oppurtunity_views.OppurtinityZoneView.as_view()),
+    path('opportunity-zone/', oppurtunity_views.OpportunityZoneView.as_view()),
 
 ]

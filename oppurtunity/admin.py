@@ -2,10 +2,10 @@ from django.contrib import admin
 
 # Register your models here.
 
-from oppurtunity.models import GeoOppurtunityZone
+from oppurtunity.models import GeoOpportunityZone
 
 
-class GeoOppurtunityZoneAdmin(admin.ModelAdmin):
+class GeoOpportunityZoneAdmin(admin.ModelAdmin):
     list_filter = ('state', 'county')
 
-admin.site.register(GeoOppurtunityZone, GeoOppurtunityZoneAdmin)
+admin.site.register(GeoOpportunityZone, GeoOpportunityZoneAdmin)

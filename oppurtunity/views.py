@@ -2,18 +2,18 @@ from django.contrib.gis.geos import GEOSGeometry
 
 from rest_framework import response, status, views
 
-from oppurtunity.models import GeoOppurtunityZone
+from oppurtunity.models import GeoOpportunityZone
 
 
-class OppurtinityZoneView(views.APIView):
+class OpportunityZoneView(views.APIView):
     """
-    API for oppurtunity zone.
+    API for opportunity zone.
     """
 
     def post(self, request):
         data = request.data
         response_list = []
-        geo_oppurtunity_objs_all = GeoOppurtunityZone.objects.filter(state='New Jersey')
+        geo_oppurtunity_objs_all = GeoOpportunityZone.objects.filter(state='New Jersey')
         for each in data:
             longitude = each.get('longitude', None)
             latitude = each.get('latitude', None)
@@ -30,8 +30,8 @@ class OppurtinityZoneView(views.APIView):
                 else:
                     geo_oppurtunity_objs = geo_oppurtunity_objs_all.filter(poly__intersects=geom)
                 if geo_oppurtunity_objs:
-                    each.update({"is_oppurtunity_zone": True})
+                    each.update({"is_opportunity_zone": True})
                 else:
-                    each.update({"is_oppurtunity_zone": False})
+                    each.update({"is_opportunity_zone": False})
             response_list.append(each)
         return response.Response(response_list)
