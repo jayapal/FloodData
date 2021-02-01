@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'rest_framework',
     'analyse',
+    'oppurtunity',
     'usda'
 ]
 
