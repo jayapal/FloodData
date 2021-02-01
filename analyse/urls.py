@@ -6,4 +6,5 @@ from . import views as analyse_views
 urlpatterns = [
     path('flood-zones/', analyse_views.FloodZoneView.as_view()),
     path('county-list/', analyse_views.CountyListView.as_view()),
+    path('mapping-data/', analyse_views.MappingDataView.as_view()),
 ]
