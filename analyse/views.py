@@ -74,11 +74,11 @@ class MappingDataView(views.APIView):
             latitude = each.get('latitude', None)
             lookup_type = each.get('lookup_type')
             geom = None
-            zones_list = []
+            zones_list, geo_usda_objs, geo_oppurtunity_objs  = [], None, None
             try:
                 geom = GEOSGeometry("Point({} {})".format(longitude, latitude), srid=4269)
             except:
-                pass
+                return response.Response({"error": "Invalid Inputs"})
             if geom:
                 if lookup_type == "contains":
                     geo_usa_objs = geo_usa_objs_all.filter(poly__contains=geom)
