@@ -3,6 +3,7 @@ from django.contrib.gis.geos import GEOSGeometry
 from rest_framework import response, status, views
 
 from analyse.models import GeoUSA, COUNTY_LIST
+from analyse import utils as analyse_utils
 from oppurtunity.models import GeoOpportunityZone
 from usda.models import GeoUSDA
 
@@ -28,7 +29,7 @@ class FloodZoneView(views.APIView):
             lookup_type = each.get('lookup_type')
             filter_by = each.get('filter_by', None)
             geom = None
-            zones_list = []
+            x_zones_list, zones_list = [], []
             try:
                 geom = GEOSGeometry("Point({} {})".format(longitude, latitude), srid=4269)
             except:
@@ -41,8 +42,15 @@ class FloodZoneView(views.APIView):
                     geo_usa_objs = geo_usa_objs.filter(poly__intersects=geom)
                 print("Geo USA objs", geo_usa_objs)
                 if geo_usa_objs:
-                    zones_list =list(geo_usa_objs.distinct('name').values_list('name', flat=True))
-                    print(zones_list)
+                    zone_x_objs = geo_usa_objs.filter(name="X")
+                    for each_obj in zone_x_objs:
+                        if each_obj.zone_info == analyse_utils.ZONE_X_SHADED:
+                            x_zones_list.append("X shaded")
+                        elif each_obj.zone_info == analyse_utils.ZONE_X_UNSHADED:
+                            x_zones_list.append("X unshaded")
+                    x_zones_list = list(set(x_zones_list))
+                    zones_list =list(geo_usa_objs.exclude(name="X").distinct('name').values_list('name', flat=True))
+                    zones_list.extend(x_zones_list)
             each.update({"zones": zones_list})
             response_list.append(each)
         return response.Response(response_list)
@@ -74,7 +82,7 @@ class MappingDataView(views.APIView):
             latitude = each.get('latitude', None)
             lookup_type = each.get('lookup_type')
             geom = None
-            zones_list, geo_usda_objs, geo_oppurtunity_objs  = [], None, None
+            x_zones_list, zones_list, geo_usda_objs, geo_oppurtunity_objs  = [], [], None, None
             try:
                 geom = GEOSGeometry("Point({} {})".format(longitude, latitude), srid=4269)
             except:
@@ -89,7 +97,15 @@ class MappingDataView(views.APIView):
                     geo_usda_objs = geo_usda_objs_all.filter(poly__intersects=geom)
                     geo_oppurtunity_objs = geo_oppurtunity_objs_all.filter(poly__intersects=geom)
                 if geo_usa_objs:
-                    zones_list =list(geo_usa_objs.distinct('name').values_list('name', flat=True))
+                    zone_x_objs = geo_usa_objs.filter(name="X")
+                    for each_obj in zone_x_objs:
+                        if each_obj.zone_info == analyse_utils.ZONE_X_SHADED:
+                            x_zones_list.append("X shaded")
+                        elif each_obj.zone_info == analyse_utils.ZONE_X_UNSHADED:
+                            x_zones_list.append("X unshaded")
+                    x_zones_list = list(set(x_zones_list))
+                    zones_list =list(geo_usa_objs.exclude(name="X").distinct('name').values_list('name', flat=True))
+                    zones_list.extend(x_zones_list)
             each.update({"is_usda_eligible": False}) if geo_usda_objs else each.update({"is_usda_eligible": True})
             each.update({"is_opportunity_zone": True}) if geo_oppurtunity_objs else each.update({"is_opportunity_zone": False})
             each.update({"zones": zones_list})
