@@ -74,9 +74,21 @@ class MappingDataView(views.APIView):
         data = request.data
         response_list = []
         filter_by = self.request.query_params.get('filter_by')
+        state_abbr = self.request.query_params.get('state')
         geo_usa_objs_all = GeoUSA.objects.exclude(name='AREA NOT INCLUDED')
-        geo_usda_objs_all = GeoUSDA.objects.filter(state='New Jersey')
-        geo_oppurtunity_objs_all = GeoOpportunityZone.objects.filter(state='New Jersey')
+        if state_abbr:
+            print(analyse_utils.states, state_abbr)
+            state = analyse_utils.states.get(state_abbr, None)
+            if state:
+                geo_usa_objs_all = geo_usa_objs_all.filter(state=state)
+                geo_oppurtunity_objs_all = GeoOpportunityZone.objects.filter(state=state)
+                geo_usda_objs_all = GeoUSDA.objects.filter(state=state)
+            else:
+                return response.Response({"error": "Invalid State filter"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            geo_usa_objs_all = geo_usa_objs_all.filter(state='New Jersey')
+            geo_oppurtunity_objs_all = GeoOpportunityZone.objects.filter(state='New Jersey')
+            geo_usda_objs_all = GeoUSDA.objects.filter(state='New Jersey')
         for each in data:
             longitude = each.get('longitude', None)
             latitude = each.get('latitude', None)

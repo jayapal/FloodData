@@ -34,7 +34,7 @@ COUNTY_TYPES = [(county, county) for county in COUNTY_LIST]
 
 class GeoUSA(models.Model):
     state = models.CharField(max_length=250, default="New Jersey")
-    county = models.CharField(max_length=250, choices=COUNTY_TYPES)
+    county = models.CharField(max_length=250, blank=True, null=True)
     name = models.CharField(max_length=2500) # corresponds to the 'str' field
     zone_info = models.CharField(max_length=2500, blank=True, null=True) # corresponds to the 'str' field
     fld_id = models.CharField(max_length=250, blank=True, null=True)
